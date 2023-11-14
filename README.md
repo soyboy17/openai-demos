@@ -1,20 +1,25 @@
 # README.md
 
-This app
+This app... #todo
 
 ## Common commands:
 
-*Start virtual environment:*
+**Start virtual environment:**
+
 python -m venv venv 
+
 ./venv/Scripts/activate.ps1
 
-*Stop virtual environment:*
+**Stop virtual environment:**
+
 deactivate
 
-*Install dependencies:*
+**Install dependencies:**
+
 pip install -r requirements.txt
 
-*Run app:*
+**Run app:**
+
 python main.py
 
 
