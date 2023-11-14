@@ -1,0 +1,16 @@
+fastapi==0.100.1
+haystack==0.12.0
+openai==0.27.8
+python-dotenv==1.0.0
+semantic-kernel==0.3.4.dev0
+starlette
+torch
+transformers
+uvicorn
+langchain
+tiktoken
+qdrant_client
+nest_asyncio
+pypdf
+faiss-cpu
+bs4
