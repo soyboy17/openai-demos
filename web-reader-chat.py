@@ -20,45 +20,23 @@ import os
 
 os.environ["OPENAI_API_KEY"] = "" # Enter your API key here
 
-def read_page(url):
-    loader = WebBaseLoader(url)
-    documents = loader.load()
-    text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
-    texts = text_splitter.split_documents(documents)
-
-    embeddings = OpenAIEmbeddings()
-    docsearch = FAISS.from_documents(texts, embeddings)
-
-    qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=docsearch.as_retriever())
-
-    return qa
-
-def is_pdf(url):
-    if url.endswith(".pdf"):
-        return True
-    
-def read_pdf(url):
-    # PyPDFLoader retrieves data from pdf file
-    loader = PyPDFLoader(url)
-    pages = loader.load_and_split()
-
-    embeddings = OpenAIEmbeddings()
-    db = FAISS.from_documents(pages, embeddings)
-
-    qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=db.as_retriever())
-
-    return qa
 
 #Prompt user for URL to read
 url = input("Enter a URL\n")  # test URL: https://en.wikipedia.org/wiki/Ensemble_learning
 
-#Check if URL is a PDF, if so, read it with read_pdf
-if is_pdf(url):
-    qa = read_pdf(url)
+# Takes a URL, checks if it is a PDF or other file and loads it into a RetrievalQA object.
+# todo: add support for other file types
+if url.endswith(".pdf"):
+    loader = PyPDFLoader(url)
+else: 
+    loader = WebBaseLoader(url)
 
-#Otherwise, read it with read_page
-else:
-    qa = read_page(url)
+pages = loader.load_and_split()
+    
+embeddings = OpenAIEmbeddings()
+db = FAISS.from_documents(pages, embeddings)
+
+qa = RetrievalQA.from_chain_type(llm=OpenAI(), chain_type="stuff", retriever=db.as_retriever())
 
 while True:        
     query = input("Ask me a question!\n")
