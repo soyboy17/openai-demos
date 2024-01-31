@@ -1,7 +1,7 @@
 """"
 WEB-READER CHATBOT
 
-This code uses langchain and OpenAI's API to create a chatbot that can answer questions about a webpage provided by the user. It checks whether or not the URL is a PDF or a webpage, and then uses the appropriate loader to retrieve the data.
+This code uses langchain and OpenAI to create a chatbot that can answer questions about a webpage provided by the user. It checks whether or not the URL is a PDF or a webpage, and then uses the appropriate loader to retrieve the data.
 
 Test pages:
     https://en.wikipedia.org/wiki/Ensemble_learning
@@ -9,13 +9,16 @@ Test pages:
 
 """
 
-from langchain.chat_models import ChatOpenAI
+from langchain_community.chat_models import ChatOpenAI
 from langchain.chains import RetrievalQA
-from langchain.document_loaders import WebBaseLoader, PyPDFLoader
-from langchain.embeddings.openai import OpenAIEmbeddings
-from langchain.llms import OpenAI
+from langchain_community.document_loaders import WebBaseLoader, PyPDFLoader
+from langchain_openai import OpenAIEmbeddings
+from langchain_openai import OpenAI
 from langchain.text_splitter import CharacterTextSplitter
-from langchain.vectorstores import FAISS
+from langchain_community.vectorstores import FAISS
+import os
+
+os.environ["OPENAI_API_KEY"] = "" # Enter your API key here
 
 def read_page(url):
     loader = WebBaseLoader(url)
@@ -59,6 +62,6 @@ else:
 
 while True:        
     query = input("Ask me a question!\n")
-    print(f"You asked: {query}")    # Debug statement
-    response = qa.run(query)
-    print(f"Response: {response}")  # Debug statement
+    #print(f"You asked: {query}")    # Debug statement
+    response = qa.invoke(query)
+    print(f"Response: {response['result']}")
